@@ -10,10 +10,18 @@ class Multt3
 public:
     int operator() (int y)
     {
+        ++m_tick;
         return (3 * y);
     }
-    Multt3() = default;
+    Multt3() :m_tick(0)
+    {
 
+    }
+    int tick() const {
+        return m_tick;
+    }
+private:
+    int m_tick;
 };
 
 class MulttX

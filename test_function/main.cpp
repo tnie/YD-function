@@ -5,6 +5,15 @@ using namespace std;
 
 using f_multiN = std::function<int(int)>;
 
+// 能够保存状态的可调用实体只有后两者：涉及类才可以。
+//但前者（重载运算符）貌似无法改变 origin object 的状态，而是改变了副本的状态
+//要向改变 origin，需要 std::ref()
+
+//int MyMultt(f_multiN& f, int m)   // 传值、传引用区别
+int MyMultt(f_multiN f, int m)
+{
+    return f(m);
+}
 int main()
 {
     auto multi2 = std::bind(multi, 2, std::placeholders::_1);
@@ -16,10 +25,20 @@ int main()
     f_multiN f2 = multi2;
     cout << "2*20 = " << f2(20) << endl;
     cout << f2.target_type().name() << endl;
-    // 可调用对象
-    f_multiN f3 = Multt3();
+    // 重载了函数调用运算符的类
+    auto multt3 = Multt3();
+    f_multiN f3 = multt3;   // 复制
+    //f_multiN& f3 = multt3;   // err
+    //f_multiN f3 = std::ref(multt3);   // 还真的可以，TODO why?
     cout << "3*10=" << f3(10) << endl;
     cout << f3.target_type().name() << endl;
+    cout << "Multt3() tick: " << multt3.tick() << endl; // 0    // TODO 关键点
+    multt3(10);
+    cout << "Multt3() tick: " << multt3.tick() << endl; // 1
+
+    cout << "3*100=" << MyMultt(f3, 100) << endl;
+    cout << "Multt3() tick: " << multt3.tick() << endl; // 1
+
     // 类成员函数
     MulttX multt4 = MulttX(4);
     f_multiN f4 = std::bind(&MulttX::multi, &multt4, std::placeholders::_1);
@@ -39,6 +58,9 @@ int main()
     cout << "f4 == f5: " << std::boolalpha << (f4.target_type() == f5.target_type()) << noboolalpha << endl;    // true
     cout << "f5 == f6: " << std::boolalpha << (f5.target_type() == f6.target_type()) << noboolalpha << endl;    // false
     //
-    cout << "MulttZ() tick: " << multt6.tick() << endl;
+    cout << "MulttZ() tick: " << multt6.tick() << endl; // 1
+    // 试验 function 作为参数
+    cout << "6*100=" << MyMultt(f6, 100) << endl;
+    cout << "MulttZ() tick: " << multt6.tick() << endl; // 2
     return 0;
 }
