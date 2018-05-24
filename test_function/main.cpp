@@ -1,6 +1,7 @@
 #include <functional>
 #include <iostream>
 #include "test.h"
+#include "../MyMultt/mymultt.h"
 using namespace std;
 
 using f_multiN = std::function<int(int)>;
@@ -9,11 +10,6 @@ using f_multiN = std::function<int(int)>;
 //但前者（重载运算符）貌似无法改变 origin object 的状态，而是改变了副本的状态
 //要向改变 origin，需要 std::ref()
 
-//int MyMultt(f_multiN& f, int m)   // 传值、传引用区别
-int MyMultt(f_multiN f, int m)
-{
-    return f(m);
-}
 int main()
 {
     auto multi2 = std::bind(multi, 2, std::placeholders::_1);
