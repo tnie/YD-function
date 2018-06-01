@@ -55,6 +55,11 @@ public:
         return MulttX::multi(y);
     }
 
+    int multi2(int y)
+    {
+        return MulttX::multi(y);
+    }
+
     int tick() const {
         return m_tick;
     }

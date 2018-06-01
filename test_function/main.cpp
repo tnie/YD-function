@@ -50,9 +50,15 @@ int main()
     f_multiN f6 = std::bind(&MulttZ::multi, &multt6, std::placeholders::_1);
     cout << "6*10=" << f6(10) << endl;
     cout << f6.target_type().name() << endl;
+    //
+    f_multiN f62 = std::bind(&MulttZ::multi2, &multt6, std::placeholders::_1);
+    cout << "6*20=" << f62(20) << endl;
+    cout << f62.target_type().name() << endl;
     // 相等判断：通过同一个类的不同对象创建的 function 对象是相等的！！
+    // 通过同一对象（类）的相同调用签名的不同函数， target_type 相等！！
     cout << "f4 == f5: " << std::boolalpha << (f4.target_type() == f5.target_type()) << noboolalpha << endl;    // true
     cout << "f5 == f6: " << std::boolalpha << (f5.target_type() == f6.target_type()) << noboolalpha << endl;    // false
+    cout << "f6 == f62: " << std::boolalpha << (f6.target_type() == f62.target_type()) << noboolalpha << endl;    // true
     //
     cout << "MulttZ() tick: " << multt6.tick() << endl; // 1
     // 试验 function 作为参数
@@ -60,3 +66,4 @@ int main()
     cout << "MulttZ() tick: " << multt6.tick() << endl; // 2
     return 0;
 }
+
