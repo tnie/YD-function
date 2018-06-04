@@ -26,21 +26,18 @@ public:
         return shared_from_this();
     }
 
-    void callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data, std::weak_ptr<EXAMPLE> wptr)
+    static void callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data, std::weak_ptr<EXAMPLE> wptr)
     {
-        if (wptr.lock() == nullptr)
+        auto ptr = wptr.lock();
+        if (ptr == nullptr)
             return;
-        // code
-        m_open = data->OpenPrice;
-        std::cout << m_prefix << m_open << m_postfix << std::endl;
-        m_close = data->ClosePrice;
-        std::cout << m_prefix << m_close << m_postfix << std::endl;
+        ptr->_callback1(qid, cbd, period, data);
     }
 
     QID subscribeDyna()
     {
         std::weak_ptr<EXAMPLE> wptr = shared_from_this();
-        return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, this, _1, _2, _3, _4, wptr));
+        return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, wptr));
     }
 private:
     std::string m_prefix;
@@ -48,6 +45,14 @@ private:
     double m_open;
     double m_close;
     static int g_count;
+    void _callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data)
+    {
+        // code
+        m_open = data->OpenPrice;
+        std::cout << m_prefix << m_open << m_postfix << std::endl;
+        m_close = data->ClosePrice;
+        std::cout << m_prefix << m_close << m_postfix << std::endl;
+    }
 };
 
 int EXAMPLE::g_count = 0;
