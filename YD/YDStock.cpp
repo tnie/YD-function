@@ -26,9 +26,9 @@ public:
         return shared_from_this();
     }
 
-    void callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data, std::weak_ptr<EXAMPLE> ptr)
+    void callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data, std::weak_ptr<EXAMPLE> wptr)
     {
-        if (ptr.lock() == nullptr)
+        if (wptr.lock() == nullptr)
             return;
         // code
         m_open = data->OpenPrice;
@@ -39,8 +39,8 @@ public:
 
     QID subscribeDyna()
     {
-        auto self = shared_from_this();
-        return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, this, _1, _2, _3, _4, std::ref(self)));
+        std::weak_ptr<EXAMPLE> wptr = shared_from_this();
+        return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, this, _1, _2, _3, _4, wptr));
     }
 private:
     std::string m_prefix;
@@ -59,10 +59,10 @@ int main()
     /*std::shared_ptr<Good> gp1 = std::make_shared<Good>();
     std::shared_ptr<Good> gp2 = gp1->getptr();*/
 
-    {
+    //{
         auto ptr = std::make_shared<Good>("属性： ", "（元）");
         ptr->subscribeDyna();
-    }
+    //}
     // 错误的使用示例：调用 shared_from_this 但其没有被 std::shared_ptr 占有
     //try {
     //    Good not_so_good;
