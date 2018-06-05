@@ -1,5 +1,5 @@
 #pragma once
-#define  _DEPRECATED
+//#define  _DEPRECATED
 using QID = unsigned long;
 using CBD = int;
 struct Dyna

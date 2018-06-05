@@ -47,10 +47,20 @@ public:
         ptr->_callback2(qid, cbd, period, data);
     }
 
+    void operator() (QID qid, CBD cbd, int period, const std::vector<Dyna> data)
+    {
+        m_postfix = "(ÈÕÔª)";
+    }
+
     QID subscribeDyna()
     {
         std::weak_ptr<EXAMPLE> wptr = shared_from_this();
         return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, wptr));
+    }
+
+    void registerSomething()
+    {
+        YDdata_subscribeDynaWithOrder("SH000001", std::ref(*(this)));
     }
 
 private:
@@ -94,6 +104,8 @@ int main()
     }
 
     auto ptr = std::make_shared<Good>("£¨$£©");
+    ptr->registerSomething();
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     ptr->subscribeDyna();
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
