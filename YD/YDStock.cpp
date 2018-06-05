@@ -78,7 +78,7 @@ size_t getAddress(std::function<T(U...)> f) {
     return (size_t)*fnPointer;
 }
 
-int main()
+int mainX()
 {
     YDDATA2CALLBACK1 ff1 = std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, std::weak_ptr<EXAMPLE>());
     YDDATA2CALLBACK1 ff2 = std::bind(&EXAMPLE::callback11, _1, _2, _3, _4, std::weak_ptr<EXAMPLE>());
