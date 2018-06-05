@@ -11,10 +11,13 @@ using std::placeholders::_4;
 
 void _thread_send(YDDATA2CALLBACK1 cb)
 {
-    auto ptr = std::make_shared<Dyna>(100.23, 109.00);
+    std::vector<Dyna> data;
+    data.emplace_back(100.23, 109.01);
+    data.emplace_back(10.23, 10.02);
+    data.emplace_back(1.23, 1.03);
     std::this_thread::sleep_for(std::chrono::seconds(5));
     if (cb)
-        cb(1, 2, 3, ptr);
+        cb(1, 2, 3, data);
 }
 
 QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1 cb, const char* order /*= nullptr*/, bool desc /*= false*/)
@@ -32,10 +35,14 @@ QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1 cb, const c
 
 void _thread_deprecated(QUOTE_RECV_CALLBACK_PTR cb)
 {
-    auto ptr = new Dyna(100.23, 109.00);
+    const size_t _COUNT_ARRAY = 3;
+    auto ptr = new Dyna[_COUNT_ARRAY];
+    ptr[0] = { 100.23, 109.03 };
+    ptr[1] = { 10.23, 10.02 };
+    ptr[2] = { 1.23, 1.01 };
     std::this_thread::sleep_for(std::chrono::seconds(5));
     if (auto cbptr = cb.lock())
-        cbptr->callback(1, 1, 3, (void*)ptr, sizeof(Dyna));
+        cbptr->callback(1, 1, 3, (void*)ptr, sizeof(Dyna)*_COUNT_ARRAY);
 }
 
 QID YDdata_subscribeDynaWithOrder(const char * code, QUOTE_RECV_CALLBACK_PTR cbwptr, const char * order, bool desc)

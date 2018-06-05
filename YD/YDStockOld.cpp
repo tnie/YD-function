@@ -67,7 +67,6 @@ public:
     }
 private:
     std::string m_postfix;
-    double m_close;
     //
     std::shared_ptr<Wrapper> _wrapper;
     void _callback1(QID qid, int period, const Kline *kptr, size_t count)
@@ -77,10 +76,14 @@ private:
     void _callback2(QID qid, int period, const Dyna *dptr, size_t count)
     {
         // do something
-        m_close = dptr->ClosePrice;
-        std::cout << m_close << m_postfix << std::endl;
+        for (size_t i = 0; i < count; i++)
+        {
+            std::cout << dptr[i].ClosePrice << m_postfix << std::endl;
+        }
     }
 };
+
+#ifdef _DEPRECATED
 
 int main()
 {
@@ -95,4 +98,7 @@ int main()
     std::this_thread::sleep_for(std::chrono::seconds(10));
     return 0;
 }
+
+#endif // _DEPRECATED
+
 

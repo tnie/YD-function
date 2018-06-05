@@ -26,7 +26,7 @@ public:
         return shared_from_this();
     }
 
-    static void callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data, std::weak_ptr<EXAMPLE> wptr)
+    static void callback1(QID qid, CBD cbd, int period, const std::vector<Dyna>& data, std::weak_ptr<EXAMPLE> wptr)
     {
         auto ptr = wptr.lock();
         if (ptr == nullptr)
@@ -35,11 +35,11 @@ public:
     }
 
     // 函数名不同，函数签名相同
-    static void callback11(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data, std::weak_ptr<EXAMPLE> wptr)
+    static void callback11(QID qid, CBD cbd, int period, const std::vector<Dyna>& data, std::weak_ptr<EXAMPLE> wptr)
     {
     }
 
-    static void callback2(QID qid, CBD cbd, int period, const std::shared_ptr<Kline> data, std::weak_ptr<EXAMPLE> wptr)
+    static void callback2(QID qid, CBD cbd, int period, const std::vector<Kline>& data, std::weak_ptr<EXAMPLE> wptr)
     {
         auto ptr = wptr.lock();
         if (ptr == nullptr)
@@ -55,14 +55,15 @@ public:
 
 private:
     std::string m_postfix;
-    double m_close;
-    void _callback1(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data)
+    void _callback1(QID qid, CBD cbd, int period, const std::vector<Dyna>& data)
     {
         // code
-        m_close = data->ClosePrice;
-        std::cout << m_close << m_postfix << std::endl;
+        for each (const auto var in data)
+        {
+            std::cout << var.ClosePrice << m_postfix << std::endl;
+        }
     }
-    void _callback2(QID qid, CBD cbd, int period, const std::shared_ptr<Kline> data)
+    void _callback2(QID qid, CBD cbd, int period, const std::vector<Kline>& data)
     {
         // do something
     }
@@ -78,13 +79,14 @@ size_t getAddress(std::function<T(U...)> f) {
     return (size_t)*fnPointer;
 }
 
-int mainX()
+#ifndef _DEPRECATED
+int main()
 {
     YDDATA2CALLBACK1 ff1 = std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, std::weak_ptr<EXAMPLE>());
     YDDATA2CALLBACK1 ff2 = std::bind(&EXAMPLE::callback11, _1, _2, _3, _4, std::weak_ptr<EXAMPLE>());
     std::cout << ff1.target_type().name() << std::endl;
     std::cout << "ff1 == ff2: " << std::boolalpha << (ff1.target_type() == ff2.target_type()) << std::noboolalpha << std::endl;    // true
-    //std::cout << "ff1 == ff2: " << std::boolalpha << (getAddress(ff1) == getAddress(ff2)) << std::noboolalpha << std::endl;    // true
+                                                                                                                                   //std::cout << "ff1 == ff2: " << std::boolalpha << (getAddress(ff1) == getAddress(ff2)) << std::noboolalpha << std::endl;    // true
 
     {
         auto ptr = std::make_shared<Good>("（元）");
@@ -97,4 +99,7 @@ int mainX()
     std::this_thread::sleep_for(std::chrono::seconds(10));
     return 0;
 }
+#endif // !_DEPRECATED
+
+
 

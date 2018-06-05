@@ -1,9 +1,11 @@
 #pragma once
+#define  _DEPRECATED
 using QID = unsigned long;
 using CBD = int;
 struct Dyna
 {
-    Dyna::Dyna(double o, double c) : OpenPrice(o), ClosePrice(c)
+    Dyna() = default;
+    Dyna(double o, double c) : OpenPrice(o), ClosePrice(c)
     {
 
     }
