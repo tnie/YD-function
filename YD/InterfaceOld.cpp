@@ -6,10 +6,12 @@ void Quote_recv_callback::callback(QID qid, CBD cbd, int period, const void * da
     std::cout << qid << " " << cbd << " " << period << " " << &dataptr << " " << size << std::endl;
 }
 
-void Quote_recv_callback::callback2(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data)
+void Quote_recv_callback::callback2(QID qid, CBD cbd, int period, const std::vector<Dyna>& data)
 {
-
-    return callback(qid, cbd, period, data.get(), 0);
+    // no way: "this" has been destroyed! it's valid.
+    // TODO: how judge "this"?
+    if (this)
+        return callback(qid, cbd, period, reinterpret_cast<const void*>(data.data()), data.size() * sizeof(Dyna));
 }
 
 

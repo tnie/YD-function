@@ -16,6 +16,7 @@ public:
     {
     public:
         virtual void realCallback(QID qid, CBD cbd, int period, const void* dataptr, size_t size) = 0;
+        virtual ~Core() = default;
     };
     //
     Wrapper(Core* ptr) : _core(ptr)
@@ -87,13 +88,13 @@ private:
 
 int main()
 {
+    auto ptr = std::make_shared<DEPRECATED>("£¨Ôª£©");
+    ptr->subscribeDyna();
+
     {
         auto ptr = std::make_shared<DEPRECATED>("£¨$£©");
         ptr->subscribeDyna();
     }
-
-    auto ptr = std::make_shared<DEPRECATED>("£¨Ôª£©");
-    ptr->subscribeDyna();
 
     std::this_thread::sleep_for(std::chrono::seconds(10));
     return 0;

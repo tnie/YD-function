@@ -1,13 +1,14 @@
 #pragma once
 #include "common.h"
 #include <memory>
+#include <vector>
 // deprecated
 class Quote_recv_callback
 {
 public:
     virtual void callback(QID qid, CBD cbd, int period, const void* dataptr, size_t size);
     // ÎªÁË¼æÈÝ
-    void callback2(QID qid, CBD cbd, int period, const std::shared_ptr<Dyna> data);
+    void callback2(QID qid, CBD cbd, int period, const std::vector<Dyna>& data);
     virtual ~Quote_recv_callback() = default;
 };
 
