@@ -21,21 +21,12 @@
     <ClCompile Include="YDData2.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="InterfaceOld.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="YDStockOld.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Interface.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="common.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="InterfaceOld.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

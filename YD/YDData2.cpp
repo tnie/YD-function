@@ -1,36 +1,14 @@
-#include "Interface.h"
+#ifdef _DEPRECATED
 #include "InterfaceOld.h"
+#else
+#include "Interface.h"
+#endif // _DEPRECATED
+
 #include <thread>
 #include <chrono>
 #include <iostream>
 
-using std::placeholders::_1;
-using std::placeholders::_2;
-using std::placeholders::_3;
-using std::placeholders::_4;
-
-void _thread_send(YDDATA2CALLBACK1 cb)
-{
-    std::vector<Dyna> data;
-    data.emplace_back(100.23, 109.01);
-    data.emplace_back(10.23, 10.02);
-    data.emplace_back(1.23, 1.03);
-    std::this_thread::sleep_for(std::chrono::seconds(5));
-    if (cb)
-        cb(1, 1, 3, data);
-}
-
-QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1 cb, const char* order /*= nullptr*/, bool desc /*= false*/)
-{
-    std::thread loop(std::bind(_thread_send, (cb)));
-    if (loop.joinable())
-    {
-        //loop.join();
-        loop.detach();
-    }
-    return 0;
-}
-
+#ifdef _DEPRECATED
 // deprecated
 
 void _thread_deprecated(QUOTE_RECV_CALLBACK_PTR cb)
@@ -61,3 +39,35 @@ QID YDdata_subscribeDynaWithOrder(const char * code, QUOTE_RECV_CALLBACK_PTR cbw
     else
         return 0;
 }
+
+#else
+using std::placeholders::_1;
+using std::placeholders::_2;
+using std::placeholders::_3;
+using std::placeholders::_4;
+
+void _thread_send(YDDATA2CALLBACK1 cb)
+{
+    std::vector<Dyna> data;
+    data.emplace_back(100.23, 109.01);
+    data.emplace_back(10.23, 10.02);
+    data.emplace_back(1.23, 1.03);
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    if (cb)
+        cb(1, 1, 3, data);
+}
+
+QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1 cb, const char* order /*= nullptr*/, bool desc /*= false*/)
+{
+    std::thread loop(std::bind(_thread_send, (cb)));
+    if (loop.joinable())
+    {
+        //loop.join();
+        loop.detach();
+    }
+    return 0;
+}
+
+
+#endif // _DEPRECATED
+

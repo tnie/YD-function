@@ -96,7 +96,7 @@ int main()
     YDDATA2CALLBACK1 ff2 = std::bind(&EXAMPLE::callback11, _1, _2, _3, _4, std::weak_ptr<EXAMPLE>());
     std::cout << ff1.target_type().name() << std::endl;
     std::cout << "ff1 == ff2: " << std::boolalpha << (ff1.target_type() == ff2.target_type()) << std::noboolalpha << std::endl;    // true
-                                                                                                                                   //std::cout << "ff1 == ff2: " << std::boolalpha << (getAddress(ff1) == getAddress(ff2)) << std::noboolalpha << std::endl;    // true
+    //std::cout << "ff1 == ff2: " << std::boolalpha << (getAddress(ff1) == getAddress(ff2)) << std::noboolalpha << std::endl;    // true
 
     {
         auto ptr = std::make_shared<Good>("£¨Ôª£©");
