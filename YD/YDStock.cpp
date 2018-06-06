@@ -55,13 +55,17 @@ public:
     QID subscribeDyna()
     {
         std::weak_ptr<EXAMPLE> wptr = shared_from_this();
-        return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, wptr));
+        //err 非常量引用的初始值必须为左值
+        //return YDdata_subscribeDynaWithOrder("SH000001", std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, wptr));
+        YDDATA2CALLBACK1 f = std::bind(&EXAMPLE::callback1, _1, _2, _3, _4, wptr);
+        return YDdata_subscribeDynaWithOrder("SH000001", f);
     }
 
-    void registerSomething()
+    /*void registerSomething()
     {
-        YDdata_subscribeDynaWithOrder("SH000001", std::ref(*(this)));
-    }
+        YDDATA2CALLBACK1 f = std::ref(*(this));
+        YDdata_subscribeDynaWithOrder("SH000001", f);
+    }*/
 
 private:
     std::string m_postfix;
@@ -104,7 +108,7 @@ int main()
     }
 
     auto ptr = std::make_shared<Good>("（$）");
-    ptr->registerSomething();
+    //ptr->registerSomething();
     std::this_thread::sleep_for(std::chrono::seconds(2));
     ptr->subscribeDyna();
 

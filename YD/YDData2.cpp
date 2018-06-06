@@ -46,7 +46,7 @@ using std::placeholders::_2;
 using std::placeholders::_3;
 using std::placeholders::_4;
 
-void _thread_send(YDDATA2CALLBACK1 cb)
+void _thread_send(YDDATA2CALLBACK1& cb)
 {
     std::vector<Dyna> data;
     data.emplace_back(100.23, 109.01);
@@ -57,9 +57,9 @@ void _thread_send(YDDATA2CALLBACK1 cb)
         cb(1, 1, 3, data);
 }
 
-QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1 cb, const char* order /*= nullptr*/, bool desc /*= false*/)
+QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1& cb, const char* order /*= nullptr*/, bool desc /*= false*/)
 {
-    std::thread loop(std::bind(_thread_send, (cb)));
+    std::thread loop(std::bind(_thread_send, std::ref(cb)));
     if (loop.joinable())
     {
         //loop.join();
