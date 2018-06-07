@@ -59,7 +59,7 @@ void _thread_send(YDDATA2CALLBACK1& cb)
 
 QID YDdata_subscribeDynaWithOrder(const char *code, YDDATA2CALLBACK1& cb, const char* order /*= nullptr*/, bool desc /*= false*/)
 {
-    std::thread loop(std::bind(_thread_send, std::ref(cb)));
+    std::thread loop(std::bind(_thread_send, /*std::ref*/(cb)));
     if (loop.joinable())
     {
         //loop.join();
